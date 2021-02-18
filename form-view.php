@@ -11,106 +11,6 @@
 </head>
 <body>
 
-<?php
-//gets the data in the session - stays if refreshed ,deletes once the browser is closed
-$email = "";
-$street = (isset($_SESSION["street"])) ? $_SESSION["street"] : "";
-$streetnumber = (isset($_SESSION["streetnumber"])) ? $_SESSION["streetnumber"] : "";
-$city = (isset($_SESSION["city"])) ? $_SESSION["city"] : "";
-$zipcode = (isset($_SESSION["zipcode"])) ? $_SESSION["zipcode"] : "";
-
-
-$streetErr = $streetnumberErr = $cityErr = $zipcodeErr = $emailErr = "";
-$sendEmail = false;
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $sendEmail = true;
-
-    //email will be filtered (correct) or false one (not valid email address)
-    if (empty($_POST["email"])) {
-        $sendEmail = false;
-        $emailErr = "Please enter your email";
-    } else {
-        $email = test_email($_POST["email"]);
-    }
-
-    //street requirement
-    if (empty($_POST["street"])) {
-        $streetErr = "Street is required";
-        $sendEmail = false;
-    } else {
-        $street = test_input($_POST["street"]);
-    }
-    //  $streetErr= (!empty($_POST["street"])) ?  'test_input($_POST["street"])' : "Street is required";
-
-//streetNumber requirement - must be a number
- $streetnumber = test_input($_POST["streetnumber"]);
- if (!empty($_POST["streetnumber"])) {
-        if (is_numeric($streetnumber)) {
-            $streetnumber = test_input($_POST["streetnumber"]);
-        } else {
-            $streetnumberErr = "A number required";
-            $sendEmail = false;
-        }
-    } else {
-        $streetnumberErr = "Street number is required";
-        $sendEmail = false;
-    }
-
-//city requirement
-    if (empty($_POST["city"])) {
-        $cityErr = "City is required";
-        $sendEmail = false;
-    } else {
-        $city = test_input($_POST["city"]);
-    }
-
-//zipcode requirement - must be a number
-    $zipcode = test_input($_POST["zipcode"]);
-    if (!empty($_POST["zipcode"])) {
-        if (is_numeric($zipcode)) {
-            $zipcode = test_input($_POST["zipcode"]);
-        } else {
-            $zipcodeErr = "A number required";
-            $sendEmail = false;
-        }
-    } else {
-        $zipcodeErr = "Zipcode is required";
-        $sendEmail = false;
-    }
-}
-//saves the data into session var
-$_SESSION["street"] = $street;
-$_SESSION["streetnumber"] = $streetnumber;
-$_SESSION["city"] = $city;
-$_SESSION["zipcode"] = $zipcode;
-
-
-function test_email($data)
-{
-    return filter_var($data, FILTER_VALIDATE_EMAIL);
-}
-
-function test_input($data)
-{
-    $data = htmlspecialchars($data);
-    return $data;
-}
-
-//delivery time
-$date = date_create();
-if (isset($_POST["express_delivery"])) {
-    $expressDeliveryTime = date_modify($date, "+45 minutes");
-    $deliveryTimeDisplay = date_format($date, "H:i") . "<br>";
-} else {
-    $deliveryTime = date_modify($date, "+2 hours");
-    $deliveryTimeDisplay = date_format($date, "H:i") . "<br>";
-}
-
-
-?>
-
-
 <div class="container">
     <?php if ($sendEmail): ?>
         <h3 style="color:#005e00" class="alert alert-success" role="alert">Your order has been sent! ETA <?php echo $deliveryTimeDisplay?></h3>
@@ -126,7 +26,7 @@ if (isset($_POST["express_delivery"])) {
             </li>
         </ul>
     </nav>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"])?>">
         <div class="form-row">
             <div class="form-group col-md-6">
 
@@ -171,7 +71,7 @@ if (isset($_POST["express_delivery"])) {
             <legend>Products</legend>
             <?php foreach ($products as $i => $product): ?>
                 <label>
-                    <input type="checkbox" value="<?php echo $i ?>" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?>
+                    <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?>
                     -
                     &euro; <?php echo number_format($product['price'], 2) ?></label><br/>
             <?php endforeach; ?>
@@ -181,11 +81,11 @@ if (isset($_POST["express_delivery"])) {
             <input type="checkbox" name="express_delivery" value="5"/>
             Express delivery (+ 5 EUR)
         </label>
-
+        <input type="hidden" name="food" value="<?php echo $foodValue ?>">
         <button type="submit" name="sub" class="btn btn-primary">Order!</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
+    <footer>You already ordered <strong>&euro; <?php echo $currentCookieValue ?></strong> in food and drinks.</footer>
 </div>
 
 <style>
