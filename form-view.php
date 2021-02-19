@@ -13,7 +13,7 @@
 
 <div class="container">
     <?php if ($sendEmail): ?>
-        <h3 style="color:#005e00" class="alert alert-success" role="alert">Your order has been sent! ETA <?php echo $deliveryTimeDisplay?></h3>
+        <h3 style="color:#0968e0 ; text-align: center" class="alert alert-primary" role="alert"><strong>Your order has been sent!</strong><br> ETA <?php echo $deliveryTimeDisplay?></h3>
     <?php endif ?>
     <h1>Order food in restaurant "the Personal Ham Processors"</h1>
     <nav>
@@ -71,9 +71,9 @@
             <legend>Products</legend>
             <?php foreach ($products as $i => $product): ?>
                 <label>
-                    <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?>
+                    <input type="text" value="" name="products[<?php echo $i ?>]"/> <?php echo $product->name ?>
                     -
-                    &euro; <?php echo number_format($product['price'], 2) ?></label><br/>
+                    &euro; <?php echo number_format($product->price, 2) ?></label><br/>
             <?php endforeach; ?>
         </fieldset>
 
@@ -82,7 +82,7 @@
             Express delivery (+ 5 EUR)
         </label>
         <input type="hidden" name="food" value="<?php echo $foodValue ?>">
-        <button type="submit" name="sub" class="btn btn-primary">Order!</button>
+        <button type="submit" name="sub" class="btn btn-primary" style="background:linear-gradient(#0c95cd,#1e1e82) ">Order!</button>
     </form>
 
     <footer>You already ordered <strong>&euro; <?php echo $currentCookieValue ?></strong> in food and drinks.</footer>

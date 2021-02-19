@@ -17,28 +17,28 @@ if (isset($_GET["food"]) || isset($_POST["food"])) {
     if ($foodValue == 0) {
         //food=0
         $products = [
-            ['name' => 'Cola', 'price' => 2],
-            ['name' => 'Fanta', 'price' => 2],
-            ['name' => 'Sprite', 'price' => 2],
-            ['name' => 'Ice-tea', 'price' => 3],
+            (object) ['name' => 'Cola', 'price' => 2],
+            (object) ['name' => 'Fanta', 'price' => 2],
+            (object) ['name' => 'Sprite', 'price' => 2],
+            (object) ['name' => 'Ice-tea', 'price' => 3],
         ];
     } else {
         //food=1
         $products = [
-            ['name' => 'Club Ham', 'price' => 3.20],
-            ['name' => 'Club Cheese', 'price' => 3],
-            ['name' => 'Club Cheese & Ham', 'price' => 4],
-            ['name' => 'Club Chicken', 'price' => 4],
-            ['name' => 'Club Salmon', 'price' => 5]
+            (object)  ['name' => 'Club Ham', 'price' => 3.20],
+            (object) ['name' => 'Club Cheese', 'price' => 3],
+            (object) ['name' => 'Club Cheese & Ham', 'price' => 4],
+            (object)  ['name' => 'Club Chicken', 'price' => 4],
+            (object)  ['name' => 'Club Salmon', 'price' => 5]
         ];
     }
 } else {
     $products = [
-        ['name' => 'Club Ham', 'price' => 3.20],
-        ['name' => 'Club Cheese', 'price' => 3],
-        ['name' => 'Club Cheese & Ham', 'price' => 4],
-        ['name' => 'Club Chicken', 'price' => 4],
-        ['name' => 'Club Salmon', 'price' => 5]
+        (object) ['name' => 'Club Ham', 'price' => 3.20],
+        (object)  ['name' => 'Club Cheese', 'price' => 3],
+        (object) ['name' => 'Club Cheese & Ham', 'price' => 4],
+        (object) ['name' => 'Club Chicken', 'price' => 4],
+        (object)  ['name' => 'Club Salmon', 'price' => 5]
     ];
     $foodValue="1";
 }
@@ -78,7 +78,9 @@ $totalValue = 0;
 $newCookieValue = "";
 if (isset($_POST["products"])) {    //gets an array with the ordered products
     foreach ($_POST["products"] as $key => $value) {    //loops per each chosen item
-        $totalValue += $products[$key]["price"];
+        if(is_numeric($value)){
+            $totalValue += $products[$key]->price*$value;//object way
+        }
     }
     if (isset($_POST["express_delivery"])) {    //checks if ex.del. check box is set
         $totalValue += (float)$_POST["express_delivery"]; //cast value into number (for math) and saves in var
@@ -94,7 +96,7 @@ if (!isset($_COOKIE["overviewCookie"])) {   //check if the C.are set
         setcookie("overviewCookie", strval($newCookieValue), time() + (3600), "/");     //set C.with a new value
         $currentCookieValue = $newCookieValue;  //new becomes the current value
     }else{
-            $currentCookieValue = $_COOKIE["overviewCookie"];   //saves current value inC.
+        $currentCookieValue = $_COOKIE["overviewCookie"];   //saves current value inC.
     }
 }
 
@@ -220,3 +222,12 @@ if ($mail == true) {
 
 */
 require 'form-view.php';
+
+
+
+
+
+
+
+
+
